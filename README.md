@@ -18,7 +18,7 @@ Free for personal & commercial use
 
 # Project Structure
 
-<img src="others/secu.gif"/>
+![](https://github.com/saqib-cipher/SketchX/blob/new/Others/secu.gif)
 
 
 
@@ -60,12 +60,6 @@ If you want to contribute, please focus on the following areas:
 4.  AI Assistant Section
     - Needs optimization and feature improvements
   
-
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors/thumbnail.png?repo_id=41986369&image_size=auto&color_scheme=dark" width="373" height="auto">
-    <img alt="Top Contributors of pingcap/tidb - Last 28 days" src="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors/thumbnail.png?repo_id=211225125&image_size=auto&color_scheme=light" width="373" height="auto">
-  </picture>
-
 > Contribution Rules
 
 - Maintain clean and readable code
