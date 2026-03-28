@@ -18,18 +18,7 @@ Free for personal & commercial use
 
 # Project Structure
 
-Assets/
--- codes.json   (🔐 encrypted)
--- svg.zip      (🔐 password protected)
-   -- svg/
-       -- outline/
-         - home.svg
-         - settings.svg
-         - user.svg
-       -- filled/
-         - home.svg
-         - settings.svg
-         - user.svg
+![Alt Text](others/New Project 1 [3352E30].gif)
 
 
 
