@@ -19,17 +19,17 @@ Free for personal & commercial use
 # Project Structure
 
 Assets/
-├── codes.json   (🔐 encrypted)
-├── svg.zip      (🔐 password protected)
-│   └── svg/
-│       ├── outline/
-│       │   ├── home.svg
-│       │   ├── settings.svg
-│       │   └── user.svg
-│       └── filled/
-│           ├── home.svg
-│           ├── settings.svg
-│           └── user.svg
+-- codes.json   (🔐 encrypted)
+-- svg.zip      (🔐 password protected)
+   -- svg/
+       -- outline/
+         - home.svg
+         - settings.svg
+         - user.svg
+       -- filled/
+         - home.svg
+         - settings.svg
+         - user.svg
 
 
 
@@ -90,9 +90,9 @@ If you want to contribute, please focus on the following areas:
 -  Sketchware Project (".swb")
  
 
- **Author**
-Saqib Cipher
-Creator of SketchX
+ > Author
+ **Saqib Cipher**
+ *Creator of SketchX*
 
 # Support
 
