@@ -1,4 +1,4 @@
-SketchX
+### SketchX
 
 SketchX — your ultimate companion for effortless mobile development.
 With 5,000+ free icons, ready for both personal and commercial use, creativity has no limits.
@@ -70,10 +70,11 @@ If you want to contribute, please focus on the following areas:
  > Included Files
 
 -  Full Source Code
--  Sketchware Project (".swb")
+-  ~~Sketchware Project (".swb")~~
  
 
- > Author
+ > #### Author
+ 
  **Saqib Cipher**
  *Creator of SketchX*
 
