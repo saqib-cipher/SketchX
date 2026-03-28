@@ -18,7 +18,7 @@ Free for personal & commercial use
 
 # Project Structure
 
-![Alt Text](others/New Project 1 [3352E30].gif)
+<img src="others/secu.gif"/>
 
 
 
