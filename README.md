@@ -25,7 +25,7 @@ Free for personal & commercial use
 # Security Info
 
 - "codes.json" password: "32@free"
--- Use <a herf="https://github.com/saqib-cipher/SketchX/blob/new/Others/SketchX%20tool_1.0.apk">Sketch-tool</a> apk to manage codes
+-- Use <a href="https://github.com/saqib-cipher/SketchX/blob/new/Others/SketchX%20tool_1.0.apk">Sketch-tool</a> apk to manage codes
 - "svg.zip" password: "23@freee"
 
 # How It Works
