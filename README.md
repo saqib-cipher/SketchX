@@ -25,7 +25,7 @@ Free for personal & commercial use
 # Security Info
 
 - "codes.json" password: "32@free"
--- Use <a herf="">Sketch-tool</a> apk to manage codes
+-- Use <a herf="https://github.com/saqib-cipher/SketchX/blob/new/Others/SketchX%20tool_1.0.apk">Sketch-tool</a> apk to manage codes
 - "svg.zip" password: "23@freee"
 
 # How It Works
@@ -40,7 +40,7 @@ Free for personal & commercial use
 
 > Contribution Guide
 
-SketchX is fully developed in <a href="http://">Sketchware Pro Daydream</a> by Saqib Cipher.
+SketchX is fully developed in <a href="https://t.me/+lKItUOWwlIg3Mjdl">Sketchware Pro Daydream</a> by Saqib Cipher.
 
 If you want to contribute, please focus on the following areas:
 
