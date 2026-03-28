@@ -50,7 +50,7 @@ Assets/
 
 > Contribution Guide
 
-SketchX is fully developed in Sketchware Pro Daydream by Saqib Cipher.
+SketchX is fully developed in <a href="http://">Sketchware Pro Daydream</a> by Saqib Cipher.
 
 If you want to contribute, please focus on the following areas:
 
