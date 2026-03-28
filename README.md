@@ -5,7 +5,7 @@ With 5,000+ free icons, ready for both personal and commercial use, creativity h
 
 Seamless Java & XML integration makes development intuitive, helping Sketchware Pro beginners turn ideas into reality with ease. From design to code, SketchX simplifies your workflow, bridging the gap between inspiration and execution.
 
-«Build smarter. Design faster. Create effortlessly.»
+*Build smarter. Design faster. Create effortlessly.*
 
 
 # Features
@@ -33,14 +33,12 @@ Assets/
 
 
 
-🔐 Security Info
+# Security Info
 
 - "codes.json" password: "32@free"
 - "svg.zip" password: "23@freee"
 
----
-
-⚙️ How It Works
+# How It Works
 
 - Two separate Java class methods handle:
   - SVG parsing
@@ -50,70 +48,53 @@ Assets/
   - "filled"
 - Designed for direct use inside Sketchware Pro projects
 
----
-
-🤝 Contribution Guide
+> Contribution Guide
 
 SketchX is fully developed in Sketchware Pro Daydream by Saqib Cipher.
 
 If you want to contribute, please focus on the following areas:
 
-🛠️ Improvements Needed
+# Improvements Needed
 
-1. 🔄 Merge Export Feature
-   
+1.  Merge Export Feature
    - Currently, users cannot export outline + filled icons together
    - Needs a unified selection/export system
 
-2. 🎨 Theme System Fix
-   
+2.  Theme System Fix
    - Not working properly on Android 16
    - Needs compatibility improvements (especially Material 3)
 
-3. 🧱 M3 Widgets Enhancement
-   
+3.  M3 Widgets Enhancement
    - Improve UI components using Material 3 expressive design
 
-4. 🤖 AI Assistant Section
-   
-   - Needs optimization and feature improvements
+4.  AI Assistant Section
+    - Needs optimization and feature improvements
+  
+<a href="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors?repo_id=41986369" target="_blank" style="display: block" align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors/thumbnail.png?repo_id=41986369&image_size=auto&color_scheme=dark" width="373" height="auto">
+    <img alt="Top Contributors of pingcap/tidb - Last 28 days" src="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors/thumbnail.png?repo_id=41986369&image_size=auto&color_scheme=light" width="373" height="auto">
+  </picture>
+</a>
 
----
-
-📌 Contribution Rules
+> Contribution Rules
 
 - Maintain clean and readable code
 - Follow existing project structure
 - Test on Sketchware Pro Daydream
 - Keep performance optimized for low-end devices
 
----
+ > Included Files
 
-📦 Included Files
+-  Full Source Code
+-  Sketchware Project (".swb")
+ 
 
-- ✅ Full Source Code
-- ✅ Sketchware Project (".swb")
-- ✅ Assets (icons + codes)
-
----
-
-💡 Future Goals
-
-- 🔍 Icon search & filtering system
-- 🌙 Advanced theme customization
-- 📤 Export improvements
-- 🤖 Smarter AI integration
-
----
-
-👨‍💻 Author
-
+ **Author**
 Saqib Cipher
 Creator of SketchX
 
----
-
-⭐ Support
+# Support
 
 If you like this project, consider:
 
@@ -121,6 +102,4 @@ If you like this project, consider:
 - 🍴 Forking it
 - 🛠️ Contributing
 
----
-
-«SketchX — Where ideas turn into reality.»
+*SketchX — Where ideas turn into reality.*
