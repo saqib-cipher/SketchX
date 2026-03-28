@@ -25,6 +25,7 @@ Free for personal & commercial use
 # Security Info
 
 - "codes.json" password: "32@free"
+-- Use <a herf="">Sketch-tool</a> apk to manage codes
 - "svg.zip" password: "23@freee"
 
 # How It Works
