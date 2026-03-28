@@ -1,0 +1,66 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:id="@+id/_main">
+	<LinearLayout
+		android:id="@+id/linear1"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<LinearLayout
+			android:id="@+id/linear17"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:layout_marginTop="4dp"
+			android:layout_marginRight="8dp"
+			android:layout_marginBottom="4dp"
+			android:gravity="center_vertical"
+			android:orientation="horizontal"
+			android:background="@drawable/shape">
+			<EditText
+				android:id="@+id/edittext1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="5dp"
+				android:padding="8dp"
+				android:background="@android:color/transparent"
+				android:textSize="14sp"
+				android:hint="Search items"
+				android:layout_weight="1"
+				android:textColor="?attr/colorOnSurface" />
+			<Button
+				android:id="@+id/button3"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="12sp"
+				android:textColor="#111110"
+				style="?attr/materialIconButtonStyle"
+				app:icon="@drawable/clear" />
+			<com.google.android.material.progressindicator.CircularProgressIndicator
+				android:id="@+id/progressBar"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="8dp"
+				android:padding="8dp"
+				android:orientation="horizontal"
+				app:indicatorSize="30dp"
+				android:indeterminate="true"
+				app:trackCornerRadius="2dp"
+				app:indicatorTrackGapSize="2dp"
+				android:visibility="gone" />
+		</LinearLayout>
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recyclerview1"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="8dp"
+			tools:listitem="@layout/coding" />
+	</LinearLayout>
+</LinearLayout>

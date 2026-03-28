@@ -1,0 +1,59 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:id="@+id/_main">
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/cardview1"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginLeft="20dp"
+		android:layout_marginTop="50dp"
+		android:layout_marginRight="20dp"
+		android:layout_marginBottom="50dp"
+		app:cardElevation="7dp"
+		app:cardCornerRadius="20dp">
+		<LinearLayout
+			android:id="@+id/linear1"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+			<TextView
+				android:id="@+id/textview2"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingLeft="8dp"
+				android:paddingTop="8dp"
+				android:paddingRight="8dp"
+				android:paddingBottom="2dp"
+				android:text="Select a Project:"
+				android:textStyle="bold"
+				android:textColor="?colorOnSurfaceVariant"
+				android:layout_gravity="bottom"
+				tools:replace="android:textSize"
+				android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recyclerview1"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="8dp"
+				android:layout_weight="1"
+				tools:listitem="@layout/projects" />
+			<Button
+				android:id="@+id/button1"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="8dp"
+				android:layout_marginRight="8dp"
+				android:layout_marginBottom="8dp"
+				android:padding="8dp"
+				android:text="Close"
+				style="@style/Widget.Material3Expressive.Button.TonalButton"
+				tools:replace="android:textSize"
+				android:textAppearance="?attr/textAppearanceLabelLarge" />
+		</LinearLayout>
+	</com.google.android.material.card.MaterialCardView>
+</LinearLayout>
