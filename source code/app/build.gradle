@@ -4,9 +4,9 @@ plugins {
 
 android {
 	compileSdk 34
-	
+
 	useLibrary 'org.apache.http.legacy'
-	
+
 	defaultConfig {
 		applicationId "Glab.SketchX"
 		namespace "Glab.SketchX"
@@ -15,11 +15,25 @@ android {
 		versionCode 1
 		versionName "1.6"
 	}
-	
+
+	signingConfigs {
+		release {
+			if (System.getenv("KEYSTORE_PATH") != null) {
+				storeFile file(System.getenv("KEYSTORE_PATH"))
+				storePassword System.getenv("KEYSTORE_PASSWORD")
+				keyAlias System.getenv("KEY_ALIAS")
+				keyPassword System.getenv("KEY_PASSWORD")
+			}
+		}
+	}
+
 	buildTypes {
 		release {
 			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+			if (System.getenv("KEYSTORE_PATH") != null) {
+				signingConfig signingConfigs.release
+			}
 		}
 	}
 }
