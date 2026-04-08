@@ -267,8 +267,10 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 						if (filePath.startsWith("http")) {
 							try {
 								java.net.URL url = new java.net.URL(filePath);
-								java.util.Scanner s = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+								java.io.InputStream is = url.openStream();
+								java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 								svgContent = s.hasNext() ? s.next() : "";
+								is.close();
 							} catch (Exception e) {
 								final String msg = e.getMessage();
 								getActivity().runOnUiThread(() -> textview1.setText("Download error: " + msg));
@@ -350,8 +352,10 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 						if (filePath.startsWith("http")) {
 							try {
 								java.net.URL url = new java.net.URL(filePath);
-								java.util.Scanner s = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+								java.io.InputStream is = url.openStream();
+								java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 								svgContent = s.hasNext() ? s.next() : "";
+								is.close();
 							} catch (Exception e) {
 								final String msg = e.getMessage();
 								getActivity().runOnUiThread(() -> textview1.setText("Download error: " + msg));
@@ -498,8 +502,10 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 							if (filePath.startsWith("http")) {
 								try {
 									java.net.URL url = new java.net.URL(filePath);
-									java.util.Scanner sc = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+									java.io.InputStream is = url.openStream();
+									java.util.Scanner sc = new java.util.Scanner(is).useDelimiter("\\A");
 									svgContent = sc.hasNext() ? sc.next() : "";
+									is.close();
 									file = File.createTempFile("temp_svg", ".svg", getContext().getCacheDir());
 									FileUtil.writeFile(file.getAbsolutePath(), svgContent);
 								} catch (Exception e) {
@@ -608,8 +614,10 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 							if (filePath.startsWith("http")) {
 								try {
 									java.net.URL url = new java.net.URL(filePath);
-									java.util.Scanner sc = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+									java.io.InputStream is = url.openStream();
+									java.util.Scanner sc = new java.util.Scanner(is).useDelimiter("\\A");
 									svgContent = sc.hasNext() ? sc.next() : "";
+									is.close();
 									file = File.createTempFile("temp_svg", ".svg", getContext().getCacheDir());
 									FileUtil.writeFile(file.getAbsolutePath(), svgContent);
 								} catch (Exception e) {

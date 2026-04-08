@@ -62,8 +62,7 @@ import com.caverock.androidsvg.SVG;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
-import
-com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -182,7 +181,7 @@ public class IconFragmentActivity extends Fragment {
 		button4.setOnClickListener(_v -> {
 			View alertLayout = getActivity().getLayoutInflater().inflate(R.layout.dial, null);
 			MaterialAlertDialogBuilder m = new MaterialAlertDialogBuilder(requireContext());
-			
+
 			m.setView(alertLayout);
 			final com.google.android.material.textfield.TextInputLayout UserName = (com.google.android.material.textfield.TextInputLayout)alertLayout.findViewById(R.id.UserNameEditText);
 			final TextInputEditText UserNameValue= (TextInputEditText)alertLayout.findViewById(R.id.UserNameValue);
@@ -311,6 +310,7 @@ public class IconFragmentActivity extends Fragment {
 	}
 
 	private void initializeLogic() {
+		outline.setChecked(true);
 		requestNetwork = new RequestNetwork(getActivity());
 		_fetchMetadata();
 		Animation animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in);
@@ -379,8 +379,6 @@ public class IconFragmentActivity extends Fragment {
 		files.clear();
 		originalFiles.clear();
 		String familyShortName = currentFamily.toLowerCase().replace(" ", "");
-		// Special case for "Material Icons" -> "materialicons"
-		// Special case for "Material Icons Outlined" -> "materialiconsoutlined"
 
 		for (HashMap<String, Object> icon : metadataIcons) {
 			ArrayList<String> families = (ArrayList<String>) icon.get("families");
@@ -401,6 +399,14 @@ public class IconFragmentActivity extends Fragment {
 		recyclerview1.setAdapter(new Recyclerview1Adapter(files));
 		recyclerview1.setLayoutManager(new GridLayoutManager(getContext(), 4));
 		_lgi(files.size());
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (iconLoadExecutor != null) {
+			iconLoadExecutor.shutdownNow();
+		}
 	}
 
 
@@ -576,12 +582,13 @@ public class IconFragmentActivity extends Fragment {
 			final TextView textview1 = _view.findViewById(R.id.textview1);
 			final ImageView imageview2 = _view.findViewById(R.id.imageview2);
 
-			if (files.get((int)_position).containsKey("file")) {
-				name = (String) files.get((int) _position).get("name");
-				pathBind = files.get((int) _position).get("file").toString();
-				textview1.setText(name);
+			HashMap<String, Object> item = files.get(_position);
+			if (item.containsKey("file")) {
+				final String itemName = (String) item.get("name");
+				final String itemUrl = item.get("file").toString();
+				textview1.setText(itemName);
 
-				final String url = pathBind;
+				final String url = itemUrl;
 				imageview1.setTag(url);
 				imageview1.setSVG(null);
 				iconLoadExecutor.execute(() -> {
@@ -600,13 +607,12 @@ public class IconFragmentActivity extends Fragment {
 					}
 				});
 			}
-			String filePath = files.get((int)_position).get("file").toString();
-			boolean isSelected = "true".equals(files.get((int)_position).get("selected"));
+			final String filePath = item.get("file").toString();
+			boolean isSelected = "true".equals(item.get("selected"));
 			imageview2.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 			cardview1.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View _view) {
-					
 					toggleSelection(filePath);
 				}
 			});
