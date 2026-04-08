@@ -240,6 +240,8 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 		button3.setOnClickListener(_v -> dismiss());
 		
 		button4.setOnClickListener(_v -> {
+			textview1.setText("Processing...");
+			new Thread(() -> {
 			if (xml) {
 				if (filled || custom) {
 					
@@ -248,8 +250,7 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 					
 					// Ensure the file list is valid
 					if (fileList == null || fileList.isEmpty()) {
-						
-						textview1.setText("No files to process");
+						getActivity().runOnUiThread(() -> textview1.setText("No files to process"));
 						return;
 					}
 					
@@ -261,16 +262,28 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 						}
 						
 						String filePath = fileMap.get("file").toString();
-						File file = new File(filePath);
-						if (!file.exists()) {
-							
-							textview1.setText("File not found: " + filePath);
-							continue;
-						}
+						String svgContent = "";
 						
-						String svgContent = FileUtil.readFile(filePath);
+						if (filePath.startsWith("http")) {
+							try {
+								java.net.URL url = new java.net.URL(filePath);
+								java.util.Scanner s = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+								svgContent = s.hasNext() ? s.next() : "";
+							} catch (Exception e) {
+								final String msg = e.getMessage();
+								getActivity().runOnUiThread(() -> textview1.setText("Download error: " + msg));
+								continue;
+							}
+						} else {
+							File file = new File(filePath);
+							if (!file.exists()) {
+								getActivity().runOnUiThread(() -> textview1.setText("File not found: " + filePath));
+								continue;
+							}
+							svgContent = FileUtil.readFile(filePath);
+						}
 						if (svgContent == null || svgContent.isEmpty()) {
-							textview1.setText("Empty SVG File"); 
+							getActivity().runOnUiThread(() -> textview1.setText("Empty SVG File"));
 							continue;
 						}
 						
@@ -309,7 +322,8 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 						
 						FileUtil.writeFile(savePath, vectorXml);
 						
-						textview1.setText("File saved: " + savePath);
+						final String path = savePath;
+						getActivity().runOnUiThread(() -> textview1.setText("File saved: " + path));
 					}
 				} else {
 					
@@ -319,8 +333,7 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 					
 					// Ensure the file list is valid
 					if (fileList == null || fileList.isEmpty()) {
-						
-						textview1.setText("No files to process");
+						getActivity().runOnUiThread(() -> textview1.setText("No files to process"));
 						return;
 					}
 					
@@ -332,16 +345,28 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 						}
 						
 						String filePath = fileMap.get("file").toString();
-						File file = new File(filePath);
-						if (!file.exists()) {
-							
-							textview1.setText("File not found: " + filePath);
-							continue;
-						}
+						String svgContent = "";
 						
-						String svgContent = FileUtil.readFile(filePath);
+						if (filePath.startsWith("http")) {
+							try {
+								java.net.URL url = new java.net.URL(filePath);
+								java.util.Scanner s = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+								svgContent = s.hasNext() ? s.next() : "";
+							} catch (Exception e) {
+								final String msg = e.getMessage();
+								getActivity().runOnUiThread(() -> textview1.setText("Download error: " + msg));
+								continue;
+							}
+						} else {
+							File file = new File(filePath);
+							if (!file.exists()) {
+								getActivity().runOnUiThread(() -> textview1.setText("File not found: " + filePath));
+								continue;
+							}
+							svgContent = FileUtil.readFile(filePath);
+						}
 						if (svgContent == null || svgContent.isEmpty()) {
-							textview1.setText("Empty SVG File"); 
+							getActivity().runOnUiThread(() -> textview1.setText("Empty SVG File"));
 							continue;
 						}
 						
@@ -369,7 +394,8 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 						
 						FileUtil.writeFile(savePath, vectorXml);
 						
-						textview1.setText("File saved: " + savePath);
+						final String path = savePath;
+						getActivity().runOnUiThread(() -> textview1.setText("File saved: " + path));
 					}
 				}
 			} else {
@@ -456,7 +482,7 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 					(ArrayList<HashMap<String, Object>>) getArguments().getSerializable("files");
 					
 					if (fileList == null || fileList.isEmpty()) {
-						textview1.setText("No files to process");
+						getActivity().runOnUiThread(() -> textview1.setText("No files to process"));
 					} else {
 						for (int n = fileList.size() - 1; n >= 0; n--) {
 							
@@ -466,16 +492,31 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 							!fileMap.get("selected").toString().equals("true")) continue;
 							
 							String filePath = fileMap.get("file").toString();
-							File file = new File(filePath);
-							
-							if (!file.exists()) {
-								textview1.setText("File not found: " + filePath);
-								continue;
+							String svgContent = "";
+							File file = null;
+
+							if (filePath.startsWith("http")) {
+								try {
+									java.net.URL url = new java.net.URL(filePath);
+									java.util.Scanner sc = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+									svgContent = sc.hasNext() ? sc.next() : "";
+									file = File.createTempFile("temp_svg", ".svg", getContext().getCacheDir());
+									FileUtil.writeFile(file.getAbsolutePath(), svgContent);
+								} catch (Exception e) {
+									final String msg = e.getMessage();
+									getActivity().runOnUiThread(() -> textview1.setText("Download error: " + msg));
+									continue;
+								}
+							} else {
+								file = new File(filePath);
+								if (!file.exists()) {
+									getActivity().runOnUiThread(() -> textview1.setText("File not found: " + filePath));
+									continue;
+								}
+								svgContent = FileUtil.readFile(filePath);
 							}
-							
-							String svgContent = FileUtil.readFile(filePath);
 							if (svgContent == null || svgContent.isEmpty()) {
-								textview1.setText("Empty SVG File");
+								getActivity().runOnUiThread(() -> textview1.setText("Empty SVG File"));
 								continue;
 							}
 							
@@ -493,10 +534,12 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 							
 							try {
 								SvgToPngHelper.convertSvgFileToPng(file, saveFile, 512, 512);
-								textview1.setText("PNG saved: " + saveFile.getAbsolutePath());
+								final String path = saveFile.getAbsolutePath();
+								getActivity().runOnUiThread(() -> textview1.setText("PNG saved: " + path));
 								
 							} catch (Exception e) {
-								textview1.setText("Error: " + e.getMessage());
+								final String msg = e.getMessage();
+								getActivity().runOnUiThread(() -> textview1.setText("Error: " + msg));
 							}
 							
 							// ADD to list (OLD + NEW)
@@ -549,7 +592,7 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 					(ArrayList<HashMap<String, Object>>) getArguments().getSerializable("files");
 					
 					if (fileList == null || fileList.isEmpty()) {
-						textview1.setText("No files to process");
+						getActivity().runOnUiThread(() -> textview1.setText("No files to process"));
 					} else {
 						for (int n = fileList.size() - 1; n >= 0; n--) {
 							
@@ -559,16 +602,31 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 							!fileMap.get("selected").toString().equals("true")) continue;
 							
 							String filePath = fileMap.get("file").toString();
-							File file = new File(filePath);
-							
-							if (!file.exists()) {
-								textview1.setText("File not found: " + filePath);
-								continue;
+							String svgContent = "";
+							File file = null;
+
+							if (filePath.startsWith("http")) {
+								try {
+									java.net.URL url = new java.net.URL(filePath);
+									java.util.Scanner sc = new java.util.Scanner(url.openStream()).useDelimiter("\\A");
+									svgContent = sc.hasNext() ? sc.next() : "";
+									file = File.createTempFile("temp_svg", ".svg", getContext().getCacheDir());
+									FileUtil.writeFile(file.getAbsolutePath(), svgContent);
+								} catch (Exception e) {
+									final String msg = e.getMessage();
+									getActivity().runOnUiThread(() -> textview1.setText("Download error: " + msg));
+									continue;
+								}
+							} else {
+								file = new File(filePath);
+								if (!file.exists()) {
+									getActivity().runOnUiThread(() -> textview1.setText("File not found: " + filePath));
+									continue;
+								}
+								svgContent = FileUtil.readFile(filePath);
 							}
-							
-							String svgContent = FileUtil.readFile(filePath);
 							if (svgContent == null || svgContent.isEmpty()) {
-								textview1.setText("Empty SVG File");
+								getActivity().runOnUiThread(() -> textview1.setText("Empty SVG File"));
 								continue;
 							}
 							
@@ -585,10 +643,12 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 							
 							try {
 								SvgToPngHelper.convertSvgFileToPng(file, saveFile, 512, 512);
-								textview1.setText("PNG saved: " + saveFile.getAbsolutePath());
+								final String path = saveFile.getAbsolutePath();
+								getActivity().runOnUiThread(() -> textview1.setText("PNG saved: " + path));
 								
 							} catch (Exception e) {
-								textview1.setText("Error: " + e.getMessage());
+								final String msg = e.getMessage();
+								getActivity().runOnUiThread(() -> textview1.setText("Error: " + msg));
 							}
 							
 							
@@ -597,6 +657,8 @@ public class ScanBottomdialogFragmentActivity extends BottomSheetDialogFragment 
 					
 				}
 			}
+			getActivity().runOnUiThread(() -> textview1.setText("Completed ✓"));
+			}).start();
 		});
 	}
 	

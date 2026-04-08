@@ -102,7 +102,7 @@
 						android:text="Telegram"
 						android:textSize="12sp"
 						android:layout_gravity="center_horizontal|center_vertical"
-						app:icon="@drawable/brand-teleram"
+						app:icon="@drawable/brand_teleram"
 						app:iconTint="?attr/colorOnPrimary"
 						app:iconPadding="4dp"
 						style="@style/Widget.Material3Expressive.Button" />
@@ -113,7 +113,7 @@
 						android:padding="8dp"
 						android:text="YouTube"
 						android:textSize="12sp"
-						app:icon="@drawable/brand-youtube"
+						app:icon="@drawable/brand_youtube"
 						app:iconTint="?attr/colorOnPrimary"
 						app:iconPadding="4dp"
 						style="@style/Widget.Material3Expressive.Button" />

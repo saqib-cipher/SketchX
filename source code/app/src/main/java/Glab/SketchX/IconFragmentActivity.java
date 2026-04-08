@@ -68,13 +68,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.android.material.textfield.TextInputLayout;
-
+
 
 public class IconFragmentActivity extends Fragment {
-	
+
 	private Timer _timer = new Timer();
-	
+
 	private String directoryName = "";
 	HashMap<String, String> selectedMap = new HashMap<>();
 	private String pathBind = "";
@@ -83,11 +85,15 @@ public class IconFragmentActivity extends Fragment {
 	private boolean filled = false;
 	private boolean custom = false;
 	private String path = "";
-	
+
 	private ArrayList<String> Pathhh = new ArrayList<>();
 	private ArrayList<HashMap<String, Object>> files = new ArrayList<>();
 	private ArrayList<HashMap<String, Object>> originalFiles = new ArrayList<>();
-	
+	private ArrayList<HashMap<String, Object>> metadataIcons = new ArrayList<>();
+	private String currentFamily = "Material Icons Outlined";
+	private RequestNetwork requestNetwork;
+	private ExecutorService iconLoadExecutor = Executors.newFixedThreadPool(4);
+
 	private LinearLayout linear1;
 	private LinearLayout linear17;
 	private RelativeLayout relativelayout1;
@@ -102,14 +108,17 @@ public class IconFragmentActivity extends Fragment {
 	private Button button5;
 	private MaterialButton outline;
 	private MaterialButton fille;
+	private MaterialButton round;
+	private MaterialButton sharp;
+	private MaterialButton twotone;
 	private TextView textview1;
 	private Button cancel;
 	private Button impor;
-	
+
 	private Intent g = new Intent();
 	private SharedPreferences sv;
 	private TimerTask t;
-	
+
 	@NonNull
 	@Override
 	public View onCreateView(@NonNull LayoutInflater _inflater, @Nullable ViewGroup _container, @Nullable Bundle _savedInstanceState) {
@@ -118,7 +127,7 @@ public class IconFragmentActivity extends Fragment {
 		initializeLogic();
 		return _view;
 	}
-	
+
 	private void initialize(Bundle _savedInstanceState, View _view) {
 		linear1 = _view.findViewById(R.id.linear1);
 		linear17 = _view.findViewById(R.id.linear17);
@@ -134,11 +143,14 @@ public class IconFragmentActivity extends Fragment {
 		button5 = _view.findViewById(R.id.button5);
 		outline = _view.findViewById(R.id.outline);
 		fille = _view.findViewById(R.id.fille);
+		round = _view.findViewById(R.id.round);
+		sharp = _view.findViewById(R.id.sharp);
+		twotone = _view.findViewById(R.id.twotone);
 		textview1 = _view.findViewById(R.id.textview1);
 		cancel = _view.findViewById(R.id.cancel);
 		impor = _view.findViewById(R.id.impor);
 		sv = getContext().getSharedPreferences("sv", Activity.MODE_PRIVATE);
-		
+
 		edittext1.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
@@ -146,29 +158,27 @@ public class IconFragmentActivity extends Fragment {
 				if (_charSeq.trim().equals("")) {
 					_showFullList();
 				} else {
-					if (filled) path = FileUtil.getPackageDataDir(getContext().getApplicationContext()).concat("/SketchX/svg/filled/"); else path = FileUtil.getPackageDataDir(getContext().getApplicationContext()).concat("/SketchX/svg/outline/");
 					searchFiles(_charSeq);
 				}
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
-				
+
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable _param1) {
-				
+
 			}
 		});
-		
+
 		button3.setOnClickListener(_v -> {
 			edittext1.setText("");
 			_showFullList();
 			SketchwareUtil.hideKeyboard(getContext().getApplicationContext());
-			if (filled) fille.performClick(); else outline.performClick();
 		});
-		
+
 		button4.setOnClickListener(_v -> {
 			View alertLayout = getActivity().getLayoutInflater().inflate(R.layout.dial, null);
 			MaterialAlertDialogBuilder m = new MaterialAlertDialogBuilder(requireContext());
@@ -219,63 +229,38 @@ public class IconFragmentActivity extends Fragment {
 			m.setCancelable(true);
 			m.show();
 		});
-		
+
 		button5.setOnClickListener(_v -> _showBottomSheet());
-		
+
 		outline.setOnClickListener(_v -> {
-			Pathhh.clear();
-			files.clear();
-			originalFiles.clear(); // ✅ store full list
-			
-			filled = false;
-			custom = false;
-			
-			String basePath = FileUtil.getPackageDataDir(getContext().getApplicationContext()).concat("/SketchX/svg/outline/");
-			if (FileUtil.isExistFile(basePath)) {
-				FileUtil.listDir(basePath, Pathhh);
-				for (String filePath : Pathhh) { 	
-					HashMap<String, Object> item = new HashMap<>();
-					item.put("file", filePath);
-					item.put("selected", selectedMap.getOrDefault(filePath, "false"));
-					files.add(item);
-					originalFiles.add(new HashMap<>(item)); // ✅ deep copy
-				}
-				_Recheck();
-				recyclerview1.setAdapter(new Recyclerview1Adapter(files));
-				recyclerview1.setLayoutManager(new GridLayoutManager(getContext(), 4));
-				_lgi(files.size());
-			}
+			currentFamily = "Material Icons Outlined";
+			_loadFamily();
 		});
-		
+
 		fille.setOnClickListener(_v -> {
-			Pathhh.clear();
-			files.clear();
-			originalFiles.clear(); // ✅ store full list
-			
-			filled = true;
-			custom = false;
-			
-			String basePath = FileUtil.getPackageDataDir(getContext().getApplicationContext()).concat("/SketchX/svg/filled/");
-			if (FileUtil.isExistFile(basePath)) {
-				FileUtil.listDir(basePath, Pathhh);
-				for (String filePath : Pathhh) { 	
-					HashMap<String, Object> item = new HashMap<>();
-					item.put("file", filePath);
-					item.put("selected", selectedMap.getOrDefault(filePath, "false"));
-					files.add(item);
-					originalFiles.add(new HashMap<>(item)); // ✅ deep copy
-				}
-				_Recheck();
-				recyclerview1.setAdapter(new Recyclerview1Adapter(files));
-				recyclerview1.setLayoutManager(new GridLayoutManager(getContext(), 4));
-				_lgi(files.size());
-			}
+			currentFamily = "Material Icons";
+			_loadFamily();
 		});
-		
+
+		round.setOnClickListener(_v -> {
+			currentFamily = "Material Icons Round";
+			_loadFamily();
+		});
+
+		sharp.setOnClickListener(_v -> {
+			currentFamily = "Material Icons Sharp";
+			_loadFamily();
+		});
+
+		twotone.setOnClickListener(_v -> {
+			currentFamily = "Material Icons Two Tone";
+			_loadFamily();
+		});
+
 		cancel.setOnClickListener(_v -> {
 			selectedMap.clear();
 			counter = 0;
-			if (filled) fille.performClick(); else outline.performClick();
+			_loadFamily();
 			//Blocks.made by Grafix Lab
 			
 			View[] vieew = {cancel, impor};
@@ -298,7 +283,7 @@ public class IconFragmentActivity extends Fragment {
 				
 			}
 		});
-		
+
 		impor.setOnClickListener(_v -> {
 			files.clear(); // Clear existing list
 			
@@ -313,7 +298,7 @@ public class IconFragmentActivity extends Fragment {
 			if (files.size() > 0) {
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("files", files);
-				bundle.putBoolean("custom", custom); 
+				bundle.putBoolean("custom", custom);
 				bundle.putBoolean("filled", filled); 
 				ScanBottomdialogFragmentActivity _fragment_ = new ScanBottomdialogFragmentActivity();
 				_fragment_.setArguments(bundle);
@@ -324,53 +309,101 @@ public class IconFragmentActivity extends Fragment {
 			}
 		});
 	}
-	
+
 	private void initializeLogic() {
-		outline.performClick();
+		requestNetwork = new RequestNetwork(getActivity());
+		_fetchMetadata();
 		Animation animation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in);
 		recyclerview1.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.animatet));
 		recyclerview1.scheduleLayoutAnimation();
 	}
-	
+
 	public void _lgi(final double _g) {
 		textview1.setText(String.valueOf((long)(_g)).concat(" items"));
-		Log.d("DEBUG", "custom: " + custom + ", filled: " + filled + ", size: " + files.size());
-		
-		if (!custom) {
-			if (!filled && files.size() < 4964) {
-				_CheckLength();
-			} else if (filled && files.size() < 999) {
-				_CheckLength();
+	}
+
+
+	public void _fetchMetadata() {
+		progressBar.setVisibility(View.VISIBLE);
+		requestNetwork.startRequestNetwork("GET", "https://fonts.google.com/metadata/icons", "metadata", new RequestNetwork.RequestListener() {
+			@Override
+			public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
+				try {
+					// The response starts with )]}'
+					String jsonString = response.substring(response.indexOf("{"));
+					JSONObject jsonObject = new JSONObject(jsonString);
+					JSONArray iconsArray = jsonObject.getJSONArray("icons");
+					metadataIcons.clear();
+					for (int i = 0; i < iconsArray.length(); i++) {
+						JSONObject iconObj = iconsArray.getJSONObject(i);
+						HashMap<String, Object> iconMap = new HashMap<>();
+						iconMap.put("name", iconObj.getString("name"));
+						iconMap.put("version", iconObj.getInt("version"));
+
+						JSONArray familiesArray = iconObj.getJSONArray("families");
+						ArrayList<String> families = new ArrayList<>();
+						for (int j = 0; j < familiesArray.length(); j++) {
+							families.add(familiesArray.getString(j));
+						}
+						iconMap.put("families", families);
+
+						if (iconObj.has("tags")) {
+							JSONArray tagsArray = iconObj.getJSONArray("tags");
+							ArrayList<String> tags = new ArrayList<>();
+							for (int k = 0; k < tagsArray.length(); k++) {
+								tags.add(tagsArray.getString(k).toLowerCase());
+							}
+							iconMap.put("tags", tags);
+						} else {
+							iconMap.put("tags", new ArrayList<String>());
+						}
+
+						metadataIcons.add(iconMap);
+					}
+					_loadFamily();
+				} catch (Exception e) {
+					Log.e("IconFragment", "Error parsing metadata", e);
+				}
+				progressBar.setVisibility(View.GONE);
+			}
+
+			@Override
+			public void onErrorResponse(String tag, String message) {
+				progressBar.setVisibility(View.GONE);
+				SketchwareUtil.showMessage(getContext(), "Failed to fetch icons: " + message);
+			}
+		});
+	}
+
+	public void _loadFamily() {
+		files.clear();
+		originalFiles.clear();
+		String familyShortName = currentFamily.toLowerCase().replace(" ", "");
+		// Special case for "Material Icons" -> "materialicons"
+		// Special case for "Material Icons Outlined" -> "materialiconsoutlined"
+
+		for (HashMap<String, Object> icon : metadataIcons) {
+			ArrayList<String> families = (ArrayList<String>) icon.get("families");
+			if (families.contains(currentFamily)) {
+				HashMap<String, Object> item = new HashMap<>();
+				String name = (String) icon.get("name");
+				int version = (int) icon.get("version");
+				// URL pattern: https://fonts.gstatic.com/s/i/{family}/{icon}/v{version}/24px.svg
+				String url = "https://fonts.gstatic.com/s/i/" + familyShortName + "/" + name + "/v" + version + "/24px.svg";
+				item.put("file", url);
+				item.put("name", name);
+				item.put("selected", selectedMap.getOrDefault(url, "false"));
+				files.add(item);
+				originalFiles.add(new HashMap<>(item));
 			}
 		}
+		_Recheck();
+		recyclerview1.setAdapter(new Recyclerview1Adapter(files));
+		recyclerview1.setLayoutManager(new GridLayoutManager(getContext(), 4));
+		_lgi(files.size());
 	}
-	
-	
-	public void _CheckLength() {
-		MaterialAlertDialogBuilder m = new MaterialAlertDialogBuilder(requireContext());
-		m.setTitle("Something went wrong...");
-		m.setMessage("Looks like icons not loaded properly?");
-		m.setPositiveButton("ReGain all icons", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface _dialog, int _which) {
-				FileUtil.deleteFile("/storage/emulated/0/Android/data/Glab.SketchX/files/SketchX/svg.zip");
-				FileUtil.deleteFile("/storage/emulated/0/Android/data/Glab.SketchX/files/SketchX/svg");
-				g.setClass(getContext().getApplicationContext(), ProgressActivity.class);
-				startActivity(g);
-				getActivity().finish();
-			}
-		});
-		m.setNegativeButton("it's fine", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface _dialog, int _which) {
-				
-			}
-		});
-		m.setCancelable(true);
-		m.show();
-	}
-	
-	
+
+
 	public void _Recheck() {
 		for (int i = 0; i < files.size(); i++) {
 			String fileId = files.get(i).get("file").toString();
@@ -380,10 +413,10 @@ public class IconFragmentActivity extends Fragment {
 				files.get(i).put("selected", "false");
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	public void _tw() {
 	}private void toggleSelection(String filePath) {
 		int position = -1;
@@ -439,106 +472,91 @@ public class IconFragmentActivity extends Fragment {
 		recyclerview1.getAdapter().notifyItemChanged(position);
 	}{
 	}
-	
-	
+
+
 	public void _search2() {
 	}
 	private void searchFiles(String searchKeyword) {
-		progressBar.setVisibility(View.VISIBLE); // 🔹 Show progress
+		progressBar.setVisibility(View.VISIBLE);
 		button3.setVisibility(View.GONE);
 		
-		int coreCount = Runtime.getRuntime().availableProcessors();
-		ExecutorService executor = Executors.newFixedThreadPool(coreCount);
+		ExecutorService executor = Executors.newSingleThreadExecutor();
 		Handler handler = new Handler(Looper.getMainLooper());
 		
+		final String query = searchKeyword.toLowerCase().trim();
+
 		executor.execute(() -> {
 			List<HashMap<String, Object>> matchedFiles = new ArrayList<>();
-			File baseDir = new File(path);
+			String familyShortName = currentFamily.toLowerCase().replace(" ", "");
 			
-			if (!baseDir.exists() || !baseDir.isDirectory()) {
-				handler.post(() -> {
-					progressBar.setVisibility(View.GONE);
-					button3.setVisibility(View.VISIBLE);
-					Toast.makeText(getContext().getApplicationContext(), "Invalid directory!", Toast.LENGTH_SHORT).show();
-				});
-				return;
-			}
-			
-			Queue<File> directories = new LinkedList<>();
-			directories.add(baseDir);
-			
-			while (!directories.isEmpty()) {
-				File currentDir = directories.poll();
-				File[] fileList = currentDir.listFiles();
+			for (HashMap<String, Object> icon : metadataIcons) {
+				ArrayList<String> families = (ArrayList<String>) icon.get("families");
+				if (!families.contains(currentFamily)) continue;
 				
-				if (fileList != null) {
-					for (File file : fileList) {
-						if (file.isDirectory()) {
-							directories.add(file);
-						} else {
-							String fileName = file.getName().toLowerCase();
-							if (fileName.contains(searchKeyword.toLowerCase())) {
-								String filePath = file.getAbsolutePath();
-								HashMap<String, Object> item = new HashMap<>();
-								item.put("file", filePath);
-								item.put("selected", selectedMap.getOrDefault(filePath, "false"));
-								matchedFiles.add(item);
-							}
+				String name = (String) icon.get("name");
+				ArrayList<String> tags = (ArrayList<String>) icon.get("tags");
+
+				boolean matches = name.toLowerCase().contains(query);
+				if (!matches && tags != null) {
+					for (String tag : tags) {
+						if (tag.contains(query)) {
+							matches = true;
+							break;
 						}
 					}
+				}
+
+				if (matches) {
+					HashMap<String, Object> item = new HashMap<>();
+					int version = (int) icon.get("version");
+					String url = "https://fonts.gstatic.com/s/i/" + familyShortName + "/" + name + "/v" + version + "/24px.svg";
+					item.put("file", url);
+					item.put("name", name);
+					item.put("selected", selectedMap.getOrDefault(url, "false"));
+					matchedFiles.add(item);
 				}
 			}
 			
 			handler.post(() -> {
-				FileDiffCallback diffCallback = new FileDiffCallback(files, matchedFiles);
-				DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-				
 				files.clear();
 				files.addAll(matchedFiles);
-				diffResult.dispatchUpdatesTo(recyclerview1.getAdapter());
+				recyclerview1.getAdapter().notifyDataSetChanged();
 				
 				progressBar.setVisibility(View.GONE); 
-				button3.setVisibility(View.VISIBLE);// 🔹 Hide progress
-				_Recheck(); // Optional: reapply selection visuals
+				button3.setVisibility(View.VISIBLE);
+				_Recheck();
 			});
 		});
 	}
 	{
 	}
-	
-	
+
+
 	public void _showFullList() {
-		
-		
-		FileDiffCallback diffCallback = new FileDiffCallback(files, originalFiles);
-		DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-		
 		files.clear();
 		for (HashMap<String, Object> item : originalFiles) {
 			files.add(new HashMap<>(item)); // deep copy to avoid shared reference
 		}
-		diffResult.dispatchUpdatesTo(recyclerview1.getAdapter());
+		recyclerview1.getAdapter().notifyDataSetChanged();
 		recyclerview1.scrollToPosition(0); // ✅ scroll to top
-		
-		
 	}
-	
-	
+
+
 	public void _showBottomSheet() {
 		if (getActivity() instanceof MainActivity) {
 			((MainActivity) getActivity())._bottomSheetTheme();
 		}
-		
+
 	}
-	
+
 	public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
-		
+
 		ArrayList<HashMap<String, Object>> _data;
-		
+
 		public Recyclerview1Adapter(ArrayList<HashMap<String, Object>> _arr) {
 			_data = _arr;
 		}
-		
+
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 			LayoutInflater _inflater = getActivity().getLayoutInflater();
@@ -547,25 +565,40 @@ public class IconFragmentActivity extends Fragment {
 			_v.setLayoutParams(_lp);
 			return new ViewHolder(_v);
 		}
-		
+
 		@Override
 		public void onBindViewHolder(ViewHolder _holder, final int _position) {
 			View _view = _holder.itemView;
-			
+
 			final androidx.cardview.widget.CardView cardview1 = _view.findViewById(R.id.cardview1);
 			final RelativeLayout relativelayout1 = _view.findViewById(R.id.relativelayout1);
 			final com.caverock.androidsvg.SVGImageView imageview1 = _view.findViewById(R.id.imageview1);
 			final TextView textview1 = _view.findViewById(R.id.textview1);
 			final ImageView imageview2 = _view.findViewById(R.id.imageview2);
-			
+
 			if (files.get((int)_position).containsKey("file")) {
-				name = Uri.parse(files.get((int) _position).get("file").toString())
-				.getLastPathSegment()
-				.replaceAll("\\.svg$", "");
+				name = (String) files.get((int) _position).get("name");
 				pathBind = files.get((int) _position).get("file").toString();
 				textview1.setText(name);
-				AndroidSVG.setImagePath(imageview1, pathBind);
-				
+
+				final String url = pathBind;
+				imageview1.setTag(url);
+				imageview1.setSVG(null);
+				iconLoadExecutor.execute(() -> {
+					try {
+						java.net.URL iconUrl = new java.net.URL(url);
+						final SVG svg = SVG.getFromInputStream(iconUrl.openStream());
+						if (getActivity() != null) {
+							getActivity().runOnUiThread(() -> {
+								if (url.equals(imageview1.getTag())) {
+									imageview1.setSVG(svg);
+								}
+							});
+						}
+					} catch (Exception e) {
+						Log.e("IconAdapter", "Error loading SVG from " + url, e);
+					}
+				});
 			}
 			String filePath = files.get((int)_position).get("file").toString();
 			boolean isSelected = "true".equals(files.get((int)_position).get("selected"));
@@ -578,16 +611,16 @@ public class IconFragmentActivity extends Fragment {
 				}
 			});
 		}
-		
+
 		@Override
 		public int getItemCount() {
 			return _data.size();
 		}
-		
+
 		public class ViewHolder extends RecyclerView.ViewHolder {
 			public ViewHolder(View v) {
 				super(v);
 			}
 		}
 	}
-}
+}
