@@ -76,33 +76,59 @@
 				android:layout_centerHorizontal="true"
 				android:layout_alignParentLeft="true"
 				tools:listitem="@layout/item" />
-			<com.google.android.material.button.MaterialButtonToggleGroup
-				android:id="@+id/linear18"
+			<HorizontalScrollView
+				android:id="@+id/scrollCategories"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="10dp"
-				android:orientation="horizontal"
-				app:singleSelection="true"
-				app:selectionRequired="true"
-				style="@style/Widget.Material3Expressive.MaterialButtonToggleGroup"
 				android:layout_centerInParent="true"
-				android:layout_alignBottom="@id/recyclerview1">
-				<com.google.android.material.button.MaterialButton
-					android:id="@+id/outline"
+				android:layout_alignBottom="@id/recyclerview1"
+				android:layout_marginBottom="10dp"
+				android:scrollbars="none">
+				<com.google.android.material.button.MaterialButtonToggleGroup
+					android:id="@+id/linear18"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="Outline"
-					style="@style/Widget.Material3Expressive.Button.OutlinedButton"
-					tools:replace="android:textSize"
-					android:textAppearance="?attr/textAppearanceLabelMedium" />
-				<com.google.android.material.button.MaterialButton
-					android:id="@+id/fille"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Filled"
-					android:textSize="12sp"
-					style="@style/Widget.Material3Expressive.Button.OutlinedButton" />
-			</com.google.android.material.button.MaterialButtonToggleGroup>
+					android:orientation="horizontal"
+					app:singleSelection="true"
+					app:selectionRequired="true"
+					style="@style/Widget.Material3Expressive.MaterialButtonToggleGroup">
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/outline"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Outlined"
+						style="@style/Widget.Material3Expressive.Button.OutlinedButton"
+						android:textSize="12sp" />
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/fille"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Filled"
+						android:textSize="12sp"
+						style="@style/Widget.Material3Expressive.Button.OutlinedButton" />
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/round"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Round"
+						android:textSize="12sp"
+						style="@style/Widget.Material3Expressive.Button.OutlinedButton" />
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/sharp"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Sharp"
+						android:textSize="12sp"
+						style="@style/Widget.Material3Expressive.Button.OutlinedButton" />
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/twotone"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Two Tone"
+						android:textSize="12sp"
+						style="@style/Widget.Material3Expressive.Button.OutlinedButton" />
+				</com.google.android.material.button.MaterialButtonToggleGroup>
+			</HorizontalScrollView>
 			<LinearLayout
 				android:id="@+id/linear19"
 				android:layout_width="wrap_content"

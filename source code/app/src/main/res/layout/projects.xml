@@ -42,7 +42,7 @@
 					android:gravity="center_horizontal|center_vertical"
 					android:text="TextView"
 					android:textSize="10sp"
-					android:background="@drawable/ShapeGl"
+					android:background="@drawable/shapegl"
 					android:textColor="?attr/colorOnSurface"
 					android:layout_alignParentBottom="true"
 					android:layout_alignBottom="@id/imageview1" />
