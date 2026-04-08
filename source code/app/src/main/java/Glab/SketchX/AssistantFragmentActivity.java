@@ -642,19 +642,19 @@ private ArrayList<HashMap<String, Object>> safeParseList(Object jsonStrObj) {
 				TypedValue typedValue = new TypedValue();
 				Context context = getContext(); // or getContext().getApplicationContext()
 				
-				context.getTheme().resolveAttribute(R.attr.colorPrimaryContainer, typedValue, true);
+				context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorPrimaryContainer, typedValue, true);
 				int codeBackgroundColor = typedValue.data;
 				
-				context.getTheme().resolveAttribute(R.attr.colorOnSurface, typedValue, true);
+				context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
 				int codeTextColor = typedValue.data;
 				
-				context.getTheme().resolveAttribute(R.attr.colorSecondary, typedValue, true);
+				context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true);
 				int linkTextColor = typedValue.data;
 				
-				context.getTheme().resolveAttribute(R.attr.colorOnSurface, typedValue, true);
+				context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
 				int normalTextColor = typedValue.data;
 				
-				context.getTheme().resolveAttribute(R.attr.colorTertiary, typedValue, true);
+				context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorTertiary, typedValue, true);
 				int codeColor = typedValue.data;
 				String markdown = _data.get((int)_position).get("text").toString();
 				List<MarkdownSegment> parts = MarkdownRenderer.segmentMarkdown(markdown);

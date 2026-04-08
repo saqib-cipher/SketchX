@@ -1,0 +1,3 @@
+package Glab.SketchX;
+
+import android.content.Context; import android.widget.LinearLayout; import java.util.*; public class MarkdownRenderer { public static List<MarkdownSegment> segmentMarkdown(String markdown) { return new ArrayList<>(); } public static void renderTableWithLayout(String content, LinearLayout table, Context context) {} public static String render(String content, Context context) { return content; } }
