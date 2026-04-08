@@ -51,7 +51,7 @@ import com.caverock.androidsvg.*;
 import com.google.android.material.card.*;
 import com.google.android.material.chip.*;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.loadingindicator.LoadingIndicator;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import java.io.*;
 import java.io.InputStream;
 import java.text.*;
@@ -71,12 +71,13 @@ import android.text.method.LinkMovementMethod;
 import com.google.gson.reflect.TypeToken;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout;
+
 
 public class AssistantFragmentActivity extends Fragment {
-	
+
 	private final String ASSIST_FILE = FileUtil.getPublicDir(Environment.DIRECTORY_DOWNLOADS).concat("/SketchX/Files/AssistData.json");
-	
+
 	private String id = "";
 	private HashMap<String, Object> oficial = new HashMap<>();
 	private HashMap<String, Object> m = new HashMap<>();
@@ -87,12 +88,12 @@ public class AssistantFragmentActivity extends Fragment {
 	private HashMap<String, Object> oficialMap = new HashMap<>();
 	private HashMap<String, Object> Params = new HashMap<>();
 	private String projectId = "";
-	
+
 	private ArrayList<HashMap<String, Object>> history = new ArrayList<>();
 	private ArrayList<HashMap<String, Object>> chatList = new ArrayList<>();
 	private ArrayList<HashMap<String, Object>> todoList = new ArrayList<>();
 	private ArrayList<HashMap<String, Object>> ChatList = new ArrayList<>();
-	
+
 	private LinearLayout linear1;
 	private LinearLayout linear5;
 	private MaterialCardView cardview1;
@@ -113,28 +114,23 @@ public class AssistantFragmentActivity extends Fragment {
 	private TextView name;
 	private TextView packages;
 	private LinearLayout linear23;
-	private LinearLayout linear22;
-	private LinearLayout ln_2;
+		private LinearLayout ln_2;
 	private RecyclerView recyclerview1;
 	private Button button1;
 	private EditText edittext1;
-	private LoadingIndicator loading_indicator2;
+	private CircularProgressIndicator progressBar;
 	private Button button2;
 	private Button button3;
 	private HorizontalScrollView hscroll1;
 	private ChipGroup linear24;
-	private Chip Normal;
-	private Chip LastEror;
-	private Chip WholeSource;
-	private Chip AddNew;
-	
+
 	private SharedPreferences it;
 	private RequestNetwork GeminiApi;
 	private RequestNetwork.RequestListener _GeminiApi_request_listener;
 	private Calendar c = Calendar.getInstance();
 	private Intent i = new Intent();
 	private SharedPreferences key;
-	
+
 	@NonNull
 	@Override
 	public View onCreateView(@NonNull LayoutInflater _inflater, @Nullable ViewGroup _container, @Nullable Bundle _savedInstanceState) {
@@ -143,7 +139,7 @@ public class AssistantFragmentActivity extends Fragment {
 		initializeLogic();
 		return _view;
 	}
-	
+
 	private void initialize(Bundle _savedInstanceState, View _view) {
 		linear1 = _view.findViewById(R.id.linear1);
 		linear5 = _view.findViewById(R.id.linear5);
@@ -165,24 +161,19 @@ public class AssistantFragmentActivity extends Fragment {
 		name = _view.findViewById(R.id.name);
 		packages = _view.findViewById(R.id.packages);
 		linear23 = _view.findViewById(R.id.linear23);
-		linear22 = _view.findViewById(R.id.linear22);
-		ln_2 = _view.findViewById(R.id.ln_2);
+				ln_2 = _view.findViewById(R.id.ln_2);
 		recyclerview1 = _view.findViewById(R.id.recyclerview1);
 		button1 = _view.findViewById(R.id.button1);
 		edittext1 = _view.findViewById(R.id.edittext1);
-		loading_indicator2 = _view.findViewById(R.id.loading_indicator2);
+		progressBar = _view.findViewById(R.id.progressBar);
 		button2 = _view.findViewById(R.id.button2);
 		button3 = _view.findViewById(R.id.button3);
 		hscroll1 = _view.findViewById(R.id.hscroll1);
 		linear24 = _view.findViewById(R.id.linear24);
-		Normal = _view.findViewById(R.id.Normal);
-		LastEror = _view.findViewById(R.id.LastEror);
-		WholeSource = _view.findViewById(R.id.WholeSource);
-		AddNew = _view.findViewById(R.id.AddNew);
-		it = getContext().getSharedPreferences("save", Activity.MODE_PRIVATE);
+										it = getContext().getSharedPreferences("save", Activity.MODE_PRIVATE);
 		GeminiApi = new RequestNetwork((Activity) getContext());
 		key = getContext().getSharedPreferences("save", Activity.MODE_PRIVATE);
-		
+
 		fille.setOnClickListener(_v -> {
 			View alertLayout = getActivity().getLayoutInflater().inflate(R.layout.dial, null);
 			MaterialAlertDialogBuilder m = new MaterialAlertDialogBuilder(requireContext());
@@ -212,7 +203,7 @@ public class AssistantFragmentActivity extends Fragment {
 			m.setCancelable(true);
 			m.show();
 		});
-		
+
 		replace.setOnClickListener(_v -> {
 			Bundle bundle = new Bundle();
 			
@@ -220,14 +211,14 @@ public class AssistantFragmentActivity extends Fragment {
 			_fragment_.setArguments(bundle);
 			_fragment_.show(getActivity().getSupportFragmentManager(), "fragment");
 		});
-		
+
 		recyclerview1.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(RecyclerView recyclerView, int _scrollState) {
 				super.onScrollStateChanged(recyclerView, _scrollState);
-				
+
 			}
-			
+
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int _offsetX, int _offsetY) {
 				super.onScrolled(recyclerView, _offsetX, _offsetY);
@@ -246,17 +237,17 @@ public class AssistantFragmentActivity extends Fragment {
 					}
 				}
 				
-				
+
 			}
 		});
-		
+
 		button1.setOnClickListener(_v -> edittext1.setText(""));
-		
+
 		button2.setOnClickListener(_v -> {
 			if (API_GEMINI.equals("")) {
 				SketchwareUtil.showMessage(getContext().getApplicationContext(), "Enter Key First");
 			} else {
-				loading_indicator2.setVisibility(View.VISIBLE);
+				progressBar.setVisibility(View.VISIBLE);
 				button2.setVisibility(View.GONE);
 				c = Calendar.getInstance();
 				ApiMap = new HashMap<>();
@@ -276,24 +267,11 @@ public class AssistantFragmentActivity extends Fragment {
 				_HistorySave();
 			}
 		});
-		
+
 		button3.setOnClickListener(_v -> {
-			if (Normal.getAlpha() == 0) _Anima(true); else _Anima(false);
-		});
-		
-		LastEror.setOnCheckedChangeListener((_buttonView, _isChecked) -> {
-			if (_isChecked) {
-				if (FileUtil.isExistFile("/storage/emulated/0/.sketchware/data/".concat(projectId.concat("/compile_log")))) {
-					String CompEror;
-					CompEror = "Hey, I Found Error While Compilation in Sketchware pro\n\n";
-					CompEror += FileUtil.readFile("/storage/emulated/0/.sketchware/data/" + projectId + "/compile_log");
-					edittext1.setText(CompEror);
-				} else {
-					SketchwareUtil.showMessage(getContext().getApplicationContext(), "There is no Compilation error ");
-				}
-			}
-		});
-		
+					});
+
+
 		_GeminiApi_request_listener = new RequestNetwork.RequestListener() {
 			@Override
 			public void onResponse(String _param1, String _param2, HashMap<String, Object> _param3) {
@@ -306,7 +284,7 @@ public class AssistantFragmentActivity extends Fragment {
 					Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
 					List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
 					String geminiText = parts.get(0).get("text").toString();
-					
+
 					c = Calendar.getInstance();
 					chatMap = new HashMap<>();
 					chatMap.put("user", "Ai");
@@ -325,24 +303,24 @@ public class AssistantFragmentActivity extends Fragment {
 						}
 					}).show();
 				}
-				loading_indicator2.setVisibility(View.GONE);
+				progressBar.setVisibility(View.GONE);
 				button2.setVisibility(View.VISIBLE);
 			}
-			
+
 			@Override
 			public void onErrorResponse(String _param1, String _param2) {
 				final String _tag = _param1;
 				final String _message = _param2;
 				button2.setVisibility(View.VISIBLE);
-				loading_indicator2.setVisibility(View.GONE);
+				progressBar.setVisibility(View.GONE);
 			}
 		};
 	}
-	
+
 	private void initializeLogic() {
 		// Load file safely
 		todoList = readAssistFile();
-		loading_indicator2.setVisibility(View.GONE);
+		progressBar.setVisibility(View.GONE);
 		if (it.contains("pos")) {
 			_DCheck(it.getString("pos", ""), it.getString("name", ""), it.getString("pkg", ""), it.getString("cust", ""));
 		} else {
@@ -350,12 +328,10 @@ public class AssistantFragmentActivity extends Fragment {
 			packages.setText("First Select a Project ");
 			cardview2.setVisibility(View.GONE);
 		}
-		WholeSource.setEnabled(false);
-		AddNew.setEnabled(false);
-		hscroll1.setHorizontalScrollBarEnabled(false);
+						hscroll1.setHorizontalScrollBarEnabled(false);
 		if (key.contains("customV")) API_GEMINI = key.getString("customV", "");
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -367,7 +343,7 @@ public class AssistantFragmentActivity extends Fragment {
 			String pkg = result.getString("pkg");
 			String cust = result.getString("cus");
 			
-			
+
 			it.edit().putString("pos", pos).commit();
 			it.edit().putString("name", namee).commit();
 			it.edit().putString("pkg", pkg).commit();
@@ -389,7 +365,8 @@ public class AssistantFragmentActivity extends Fragment {
 			m.show();
 		}
 	}
-	
+
+
 	public void _DCheck(final String _Pos, final String _name, final String _pkg, final String _cust) {
 		id = _pkg + "_" + _Pos;
 		projectId = _Pos;
@@ -409,7 +386,7 @@ public class AssistantFragmentActivity extends Fragment {
 		
 		
 		
-		
+
 		todoList = readAssistFile();
 		
 		boolean found = false;
@@ -447,14 +424,10 @@ public class AssistantFragmentActivity extends Fragment {
 			((LinearLayoutManager) recyclerview1.getLayoutManager())
 			.scrollToPositionWithOffset(chatList.size() - 1, 0);
 		}
-		
-		if (LastEror.isChecked()) {
-			edittext1.setText("");
-			Normal.setChecked(true);
-		}
-	}
-	
-	
+
+			}
+
+
 	public void _addText(final String _text, final boolean _you) {
 		
 		// Create one message
@@ -474,10 +447,10 @@ public class AssistantFragmentActivity extends Fragment {
 		// ✅ Send FULL history to Gemini
 		oficialMap.clear();
 		oficialMap.put("contents", history);
-		
+
 	}
-	
-	
+
+
 	public void _CreateChat() {
 		String customName = name.getText().toString(); 
 		String ProjectPackage = packages.getText().toString();
@@ -500,8 +473,8 @@ public class AssistantFragmentActivity extends Fragment {
 		
 		pos = todoList.size() - 1;
 	}
-	
-	
+
+
 	public void _HistorySave() {
 		try {
 			m = new HashMap<>();
@@ -522,8 +495,8 @@ public class AssistantFragmentActivity extends Fragment {
 			FileUtil.writeFile(ASSIST_FILE, new Gson().toJson(todoList));
 		} catch (Exception ignored) {}
 	}
-	
-	
+
+
 	private ArrayList<HashMap<String, Object>> readAssistFile() {
         if (!FileUtil.isExistFile(ASSIST_FILE)) return new ArrayList<>();
         try {
@@ -548,57 +521,31 @@ private ArrayList<HashMap<String, Object>> safeParseList(Object jsonStrObj) {
             return new ArrayList<>();
         }
     }
-	
-	
+
+
 	public void _Anima(final boolean _tyep) {
 		if (_tyep) {
 			//Blocks.made by Grafix Lab
 			
-			View[] vieew = {Normal, LastEror, WholeSource, AddNew};
-			for (int i = 0; i < vieew.length; i++) {
-				final View ViewsGr = vieew[i];
+
 				hscroll1.setVisibility(View.VISIBLE);
-				//Blocks.Made by Grafix Lab
-				ViewsGr.animate()
-				.setStartDelay(i * 200)
-				.setInterpolator(new OvershootInterpolator(4f))
-				.alpha(1f)
-				.translationY(0f);
-				
-			}
 		} else {
 			//Blocks.made by Grafix Lab
 			
-			View[] vieew = {Normal, LastEror, WholeSource, AddNew};
-			for (int i = 0; i < vieew.length; i++) {
-				final View ViewsGr = vieew[i];
+
 				//Blocks.Made by Grafix Lab
-				ViewsGr.animate()
-				.setStartDelay(i * 200)
-				.setInterpolator(new OvershootInterpolator(4f))
-				.alpha(0f)
-				.translationY(30f)
-				.withEndAction(new Runnable() {
-					@Override
-					public void run() {
-						
-						hscroll1.setVisibility(View.GONE);
-					}
-				}
-				);
-				
-			}
+				hscroll1.setVisibility(View.GONE);
 		}
 	}
-	
+
 	public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
-		
+
 		ArrayList<HashMap<String, Object>> _data;
-		
+
 		public Recyclerview1Adapter(ArrayList<HashMap<String, Object>> _arr) {
 			_data = _arr;
 		}
-		
+
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 			LayoutInflater _inflater = getActivity().getLayoutInflater();
@@ -607,11 +554,11 @@ private ArrayList<HashMap<String, Object>> safeParseList(Object jsonStrObj) {
 			_v.setLayoutParams(_lp);
 			return new ViewHolder(_v);
 		}
-		
+
 		@Override
 		public void onBindViewHolder(ViewHolder _holder, final int _position) {
 			View _view = _holder.itemView;
-			
+
 			final LinearLayout you_base = _view.findViewById(R.id.you_base);
 			final LinearLayout ia_base = _view.findViewById(R.id.ia_base);
 			final TextView you_name_text = _view.findViewById(R.id.you_name_text);
@@ -625,7 +572,7 @@ private ArrayList<HashMap<String, Object>> safeParseList(Object jsonStrObj) {
 			final LinearLayout linear13 = _view.findViewById(R.id.linear13);
 			final TextView ia_message_time = _view.findViewById(R.id.ia_message_time);
 			final ImageView imageview1 = _view.findViewById(R.id.imageview1);
-			
+
 			if (chatList.get((int) _position).get("user").toString().equals("you")) {
 				you_base.setVisibility(View.VISIBLE);
 				ia_base.setVisibility(View.GONE);
@@ -743,7 +690,7 @@ private ArrayList<HashMap<String, Object>> safeParseList(Object jsonStrObj) {
 					}
 					
 				}
-				
+
 				ia_name_text.setText(chatList.get((int) _position).get("user").toString());
 			}
 			imageview1.setOnClickListener(new View.OnClickListener() {
@@ -753,16 +700,16 @@ private ArrayList<HashMap<String, Object>> safeParseList(Object jsonStrObj) {
 				}
 			});
 		}
-		
+
 		@Override
 		public int getItemCount() {
 			return _data.size();
 		}
-		
+
 		public class ViewHolder extends RecyclerView.ViewHolder {
 			public ViewHolder(View v) {
 				super(v);
 			}
 		}
 	}
-}
+}
