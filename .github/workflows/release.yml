@@ -2,7 +2,7 @@ name: Release APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "new" ]
     tags:
       - 'v*'
 
