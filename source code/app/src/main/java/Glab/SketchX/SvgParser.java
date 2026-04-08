@@ -1,0 +1,3 @@
+package Glab.SketchX;
+
+import java.util.*; public class SvgParser { public static class SvgAttributes { public List<String> getPaths() { return new ArrayList<>(); } public List<String> getFills() { return new ArrayList<>(); } public List<String> getStrokes() { return new ArrayList<>(); } public List<String> getStrokeWidths() { return new ArrayList<>(); } public String getWidth() { return "24"; } public String getHeight() { return "24"; } public String getViewportWidth() { return "24"; } public String getViewportHeight() { return "24"; } } public static SvgAttributes extractSvgDetails(String content) { return new SvgAttributes(); } }

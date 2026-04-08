@@ -14,4 +14,9 @@
 		<item name="windowActionBar">true</item>
 		<item name="windowNoTitle">false</item>
 	</style>
+    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
 </resources>

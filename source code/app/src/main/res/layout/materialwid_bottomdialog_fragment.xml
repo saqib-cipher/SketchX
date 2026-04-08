@@ -170,7 +170,7 @@
 					android:layout_height="wrap_content"
 					android:textSize="12sp"
 					style="@style/Widget.Material3Expressive.Button.IconButton"
-					app:icon="@drawable/brand-github" />
+					app:icon="@drawable/brand_github" />
 				<Button
 					android:id="@+id/copyX"
 					android:layout_width="wrap_content"

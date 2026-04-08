@@ -115,7 +115,7 @@
 								android:layout_height="wrap_content"
 								android:paddingLeft="4dp"
 								android:paddingRight="4dp"
-								android:background="@drawable/ShapeGl"
+								android:background="@drawable/shapegl"
 								android:gravity="center_horizontal|center_vertical"
 								android:text="TextView"
 								android:textSize="10sp"
