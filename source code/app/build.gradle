@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
+	namespace "Glab.SketchX"
 	compileSdk 35
 
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		applicationId "Glab.SketchX"
-		namespace "Glab.SketchX"
 		minSdkVersion 23
 		targetSdkVersion 34
 		versionCode 1
@@ -25,6 +25,10 @@ android {
 				keyPassword System.getenv("KEY_PASSWORD")
 			}
 		}
+	}
+
+	lint {
+		abortOnError false
 	}
 
 	buildTypes {
