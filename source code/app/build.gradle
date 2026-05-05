@@ -11,9 +11,14 @@ android {
 	defaultConfig {
 		applicationId "Glab.SketchX"
 		minSdkVersion 23
-		targetSdkVersion 34
+		targetSdkVersion 35
 		versionCode 1
 		versionName "1.6"
+	}
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_17
+		targetCompatibility JavaVersion.VERSION_17
 	}
 
 	signingConfigs {
